@@ -149,7 +149,7 @@ def TS():
             elif tsinp == 'test4': sequence(test4)
             else:
                 #print('got to the second else!')
-                if tsinp.split(' ')[0] == 'file':
+                if tsinp.split(' ')[0] == 'file' or tsinp.split(' ')[0] == 'run':
                     if len(tsinp.split(' ')) >= 2:
                         tsinp = getfile(tsinp.split(' ')[1])
                         lcheck = tsinp.split('\n')
