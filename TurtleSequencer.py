@@ -20,6 +20,8 @@ Turt.goto(0,0)
 #screen = Screen()
 #screen.screensize(800, 800)
 
+
+
 test1 = [(100,0), (100,100), (-100,100), (-100,-100), (100,-100), (100,0)]
 
 test2 = [(100,0), (-100,0), (0,0), (0,100), (0,-100), (0,0), (-100,-100), (100,100), (0,0), (100,-100), (-100,100), (0,0)]
@@ -27,6 +29,43 @@ test2 = [(100,0), (-100,0), (0,0), (0,100), (0,-100), (0,0), (-100,-100), (100,1
 test3 = [(225, 500), (65, 185), (390, 65), (-10, 550), (-10, -10), (290, 255), (225, 285), (310, 400), (425, 215), (165, 480), (55, 135)]
 
 test4 = [(225, 265), (335, 145), (460, 345), (150, 475), (35, 190)]
+
+
+def boxes():
+    Turt.color('white')
+    Turt.goto(4, -4)
+    Turt.color('black')
+    Turt.goto(-24, -4)
+    Turt.goto(-24, 24)
+    Turt.goto(4, 24)
+    Turt.goto(4, -4)
+    Turt.color('white')
+    Turt.goto(64, 54)
+    Turt.color('black')
+    Turt.goto(64, 94)
+    Turt.goto(104, 94)
+    Turt.goto(104, 54)
+    Turt.goto(64, 54)
+    Turt.color('white')
+    Turt.goto(34, -54)
+    Turt.color('black')
+    Turt.goto(14, -54)
+    Turt.goto(-4, -74)
+    Turt.goto(-4, -94)
+    Turt.goto(14, -114)
+    Turt.goto(34, -114)
+    Turt.goto(54, -94)
+    Turt.goto(54, -74)
+    Turt.goto(34, -54)
+    Turt.color('white')
+    Turt.goto(-114, -34)
+    Turt.color('black')
+    Turt.goto(-184, -34)
+    Turt.goto(-184, -104)
+    Turt.goto(-114, -104)
+    Turt.goto(-114, -34)
+    Turt.hideturtle()
+
 
 
 #def Turty():
@@ -70,8 +109,16 @@ def totl(list: list):
     return ostr
 
 
-def sequence(tlist: list | tuple):
-    for t in tlist: Turt.goto(t[0], t[1]); print(f'moved Turt to {t}')
+def sequence(tlist: list | tuple, shouldhardcode: bool, shouldhide: bool):
+    if shouldhide: Turt.hideturtle()
+    out = ''
+    if shouldhardcode:
+        for t in tlist:
+            out = f'{out}Turt.goto{t}\n'
+        out = f'{out}Turt.hideturtle()'
+        print(out)
+    else:
+        for t in tlist: Turt.goto(t[0], t[1]); print(f'moved Turt to {t}')
 
 
 def getfile(file: str | None):
@@ -121,20 +168,27 @@ def TS():
     pointer = '> '
     lcheck = []
     multiline = False
+    hardcode = False
+    hide = False
     while True:
         tsinp = input(pointer)
         #print(tsinp)
+        if len(tsinp.split(' ')) >= 2:
+            if tsinp.split(' ')[1] == 'hide': hide = True; pass
+        else: pass
+
         if tsinp == 'exit' or tsinp == 'quit': break
-        elif tsinp == 'clear': Turt.clear(); print('cleared all drawings')
-        elif tsinp == 'reset': Turt.goto(0,0); Turt.clear(); print('reset everything')
+        elif tsinp.split(' ')[0] == 'clear': Turt.clear(); print('cleared all drawings')
+        elif tsinp.split(' ')[0] == 'reset': Turt.goto(0,0); Turt.clear(); print('reset everything')
         #elif 'image' in tsinp: #Turt.register_shape(tsinp.split(' ')[1])
-        #elif tsinp == 'draw 1': Turt.shape('Greeben-flat.gif')#Turt.shape(tsinp.split(' ')[1])
-        elif tsinp == 'log' or tsinp == 'logs': getlogs()
-        elif tsinp == 'show': Turt.showturtle(); print('Turt shown')
-        elif tsinp == 'hide': Turt.hideturtle(); print('Turt hidden')
-        elif tsinp == 'undo': Turt.undo(); print('undid draw')
-        elif tsinp == 'pos':  print(f'Turt{Turt.pos()}')
-        elif tsinp == 'angle':  print(f'Turt({Turt.heading()})')
+        #elif tsinp.split(' ')[0] == 'draw 1': Turt.shape('Greeben-flat.gif')#Turt.shape(tsinp.split(' ')[1])
+        elif tsinp.split(' ')[0] == 'log' or tsinp == 'logs': getlogs()
+        elif tsinp.split(' ')[0] == 'show': Turt.showturtle(); print('Turt shown')
+        elif tsinp.split(' ')[0] == 'hide': Turt.hideturtle(); print('Turt hidden')
+        elif tsinp.split(' ')[0] == 'undo': Turt.undo(); print('undid draw')
+        elif tsinp.split(' ')[0] == 'pos':  print(f'Turt{Turt.pos()}')
+        elif tsinp.split(' ')[0] == 'angle':  print(f'Turt({Turt.heading()})')
+        elif tsinp.split(' ')[0] == 'boxes': boxes()
         elif tsinp.split(' ')[0] == 'speed':
             #print(len(tsinp.split(' ')))
             if len(tsinp.split(' ')) < 2: print(f'Turt({Turt.speed()})')
@@ -151,6 +205,9 @@ def TS():
                 #print('got to the second else!')
                 if tsinp.split(' ')[0] == 'file' or tsinp.split(' ')[0] == 'run':
                     if len(tsinp.split(' ')) >= 2:
+                        if len(tsinp.split(' ')) >= 3:
+                            if tsinp.split(' ')[2] == 'hardcode': hardcode = True
+                            elif tsinp.split(' ')[2] == 'hide': hide = True
                         tsinp = getfile(tsinp.split(' ')[1])
                         lcheck = tsinp.split('\n')
                         if len(lcheck) >= 2: multiline = True
@@ -163,9 +220,9 @@ def TS():
                 if multiline:
                     for line in lcheck:
                         if not '--' in line and line != '':
-                            ln = line.split('/') 
-                            sequence(totlist(ln))
-                else: sequence(totlist(rlist))
+                            ln = line.split('/')
+                            sequence(totlist(ln), hardcode, hide)
+                else: sequence(totlist(rlist), hardcode, hide)
         log(tsinp)
 
 

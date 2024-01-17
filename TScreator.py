@@ -131,8 +131,9 @@ def instructs(wayp: list):
 
 def save(turstructs: str):
     if savetofile:
-        savename = input('please type a name')
+        savename = input('please type a name\n')
         with open(f'drawings/{savename}.txt', 'xt') as savefile: savefile.write(turstructs)
+        print('TS instructions generated')
     else: print(turstructs)
 
 
