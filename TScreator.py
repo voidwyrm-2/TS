@@ -35,6 +35,7 @@ pygame.display.set_caption("TSCreator")
 pygame.font.init()
 mainfont = pygame.font.Font('freesansbold.ttf', 32)
 
+savetofile = True
 pixelmode = True
 
 plinitxy = windratio[0] // 2, windratio[1] // 2
@@ -128,6 +129,12 @@ def instructs(wayp: list):
     return out
 
 
+def save(turstructs: str):
+    if savetofile:
+        savename = input('please type a name')
+        with open(f'drawings/{savename}.txt', 'xt') as savefile: savefile.write(turstructs)
+    else: print(turstructs)
+
 
 
 
@@ -173,7 +180,7 @@ while running:
 
                 #if event.key == pygame.K_r: plx = 0; ply = 0; wps.clear()
 
-                if event.key == pygame.K_p: print(instructs(wps))
+                if event.key == pygame.K_p: save(instructs(wps))
 
 
         if event.type == pygame.KEYUP and (event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_a or event.key == pygame.K_d): changedX = 0#; ismoving = False
