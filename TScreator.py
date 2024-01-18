@@ -38,6 +38,8 @@ mainfont = pygame.font.Font('freesansbold.ttf', 32)
 savetofile = True
 pixelmode = True
 
+SHOWACTUALCOORDS = True
+
 plinitxy = windratio[0] // 2, windratio[1] // 2
 
 if pixelmode: plinitxy = 360, 360
@@ -92,6 +94,12 @@ def showcoords(x, y):
     screen.blit(co, (x, y))
 
 
+def showtruecoords(x, y):
+    truco = mainfont.render(f'plX:{plX},plY:{plY}', True, (255, 255, 255))
+    #co = mainfont.render(f'plX:{plX},plY:{plY}', True, (255, 255, 255))
+    screen.blit(truco, (x, y))
+
+
 def placeWaypoints():
     wpsize = 5
     if pixelmode: wpsize = 2
@@ -101,6 +109,37 @@ def placeWaypoints():
 def drawWPlines():
     for p in range(len(wps)):
         pygame.draw.line(screen, (250, 0, 0), wps[limit(p, len(wps) - 1)], wps[limit(p + 1, len(wps) - 1)])
+
+
+def drawsquare(radius):
+    global plX
+    global plY
+    global wps
+    wps.append((plX + radius, plY + radius))
+    wps.append((plX - radius, plY + radius))
+    wps.append((plX - radius, plY - radius))
+    wps.append((plX + radius, plY - radius))
+    wps.append((plX + radius, plY + radius))
+
+
+def drawcircle(radius, points):
+    global plX
+    global plY
+    global wps
+    wps.append((plX + radius, plY + radius))
+    wps.append((plX + radius, plY + (radius // 2)))
+    wps.append((plX - radius, plY + radius))
+    wps.append((plX - radius, plY - radius))
+    wps.append((plX + radius, plY - radius))
+    wps.append((plX + radius, plY + radius))
+    #for cp in range(points):
+        #if cp < pointsq + 1: wps.append((plX + radius, plY + radius))
+        #if cp > pointsq + 1 and cp < (pointsq * 2) + 1: wps.append((plX + radius, plY + radius))
+        #if cp > pointsq + 1 and cp < (pointsq * 3) + 1: wps.append((plX + radius, plY + radius))
+        #if cp > pointsq + 1 and cp < (pointsq * 4) + 1: wps.append((plX + radius, plY + radius))
+            
+
+
 
 
 def drawpixelgrid():
@@ -173,15 +212,32 @@ while running:
                 
                 if event.key == pygame.K_c: wps.clear()
 
-                #if event.key == pygame.K_x: changedX = 0; plx = windratio[0] // 2
+                if event.key == pygame.K_x:
+                    plX = windratio[0] // 2
+                    if pixelmode: plX += 4
 
-                #if event.key == pygame.K_y: changedY = 0; ply = windratio[1] // 2
+                if event.key == pygame.K_y:
+                    plY = windratio[1] // 2
+                    if pixelmode: plY += 4
 
-                if event.key == pygame.K_z: wps.append(0,0) #changedX = 0; changedY = 0; isReset = True
+                if event.key == pygame.K_z:
+                    plX = windratio[0] // 2; plY = windratio[0] // 2
+                    if pixelmode: plX += 4; plY += 4
 
-                #if event.key == pygame.K_r: plx = 0; ply = 0; wps.clear()
+                if event.key == pygame.K_r:
+                    plX = windratio[0] // 2; plY = windratio[0] // 2
+                    if pixelmode: plX += 4; plY += 4
+                    wps.clear()
 
                 if event.key == pygame.K_p: save(instructs(wps))
+
+                if event.key == pygame.K_1: drawsquare(20)#; print(wps)
+
+                if event.key == pygame.K_2: drawcircle(20, 20); print(wps)
+
+                if event.key == pygame.K_0:
+                    if pixelmode: wps.append(((windratio[0] // 2) + 4,(windratio[1] // 2) + 4))
+                    else: wps.append((windratio[0] // 2,windratio[1] // 2))
 
 
         if event.type == pygame.KEYUP and (event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_a or event.key == pygame.K_d): changedX = 0#; ismoving = False
@@ -209,12 +265,12 @@ while running:
         #isReset = False
 
     if pixelmode: drawpixelgrid()
+    showWpoints(0, 0)
+    if SHOWACTUALCOORDS: showtruecoords(0, 35)
+    else: showcoords(0, 35)
+    #print(f'Y:{plY}')
 
     placeWaypoints()
     drawWPlines()
-    showWpoints(0, 0)
-    showcoords(0, 35)
-    #print(f'Y:{plY}')
-
     player(plX, plY, plicon)
     pygame.display.update()
