@@ -67,6 +67,23 @@ def boxes():
     Turt.hideturtle()
 
 
+def box3d():
+    Turt.goto(4, -4)
+    Turt.goto(134, -4)
+    Turt.goto(134, -94)
+    Turt.goto(4, -94)
+    Turt.goto(4, -4)
+    Turt.goto(64, -4)
+    Turt.goto(64, -94)
+    Turt.hideturtle()
+
+
+
+'''hardcodes = {
+    'boxes': boxes(),
+    '3dbox': box3d()
+}'''
+
 
 #def Turty():
 
@@ -165,11 +182,13 @@ def TS():
     print('to reset everything to AS IT WAS, type "reset"')
     print('to make Turt go batcrap insane and do whatever the heck he wants, type "random"')
     #print('to draw a preset, type "draw [preset number]", currently availible presets: 1, ')
+
     pointer = '> '
     lcheck = []
     multiline = False
     hardcode = False
     hide = False
+
     while True:
         tsinp = input(pointer)
         #print(tsinp)
@@ -178,50 +197,76 @@ def TS():
         else: pass
 
         if tsinp == 'exit' or tsinp == 'quit': break
+
         elif tsinp.split(' ')[0] == 'clear': Turt.clear(); print('cleared all drawings')
+
         elif tsinp.split(' ')[0] == 'reset': Turt.goto(0,0); Turt.clear(); print('reset everything')
+
         #elif 'image' in tsinp: #Turt.register_shape(tsinp.split(' ')[1])
+
         #elif tsinp.split(' ')[0] == 'draw 1': Turt.shape('Greeben-flat.gif')#Turt.shape(tsinp.split(' ')[1])
+
         elif tsinp.split(' ')[0] == 'log' or tsinp == 'logs': getlogs()
+
         elif tsinp.split(' ')[0] == 'show': Turt.showturtle(); print('Turt shown')
+
         elif tsinp.split(' ')[0] == 'hide': Turt.hideturtle(); print('Turt hidden')
+
         elif tsinp.split(' ')[0] == 'undo': Turt.undo(); print('undid draw')
+
         elif tsinp.split(' ')[0] == 'pos':  print(f'Turt{Turt.pos()}')
+
         elif tsinp.split(' ')[0] == 'angle':  print(f'Turt({Turt.heading()})')
+
         elif tsinp.split(' ')[0] == 'boxes': boxes()
+
         elif tsinp.split(' ')[0] == 'speed':
             #print(len(tsinp.split(' ')))
             if len(tsinp.split(' ')) < 2: print(f'Turt({Turt.speed()})')
             elif tsinp.split(' ')[1] == 'reset' or tsinp.split(' ')[1] == 'reset': Turt.speed(3); print('reset Turt\'s speed to normal')
             else: Turt.speed(int(tsinp.split(' ')[1])); print(f'set Turt\'s speed to {tsinp.split(" ")[1]}')
+
         elif tsinp == 'random': randtur()
+
         else:
             #print('got to the first else!')
+
             if tsinp == 'test1': sequence(test1)
+
             elif tsinp == 'test2': sequence(test2)
+
             elif tsinp == 'test3': sequence(test3)
+
             elif tsinp == 'test4': sequence(test4)
+
             else:
                 #print('got to the second else!')
-                if tsinp.split(' ')[0] == 'file' or tsinp.split(' ')[0] == 'run':
+
+                if tsinp.split(' ')[0] == 'file' or tsinp.split(' ')[0] == 'run' or tsinp.split(' ')[0] == 'draw':
                     if len(tsinp.split(' ')) >= 2:
                         if len(tsinp.split(' ')) >= 3:
                             if tsinp.split(' ')[2] == 'hardcode': hardcode = True
                             elif tsinp.split(' ')[2] == 'hide': hide = True
+
                         tsinp = getfile(tsinp.split(' ')[1])
                         lcheck = tsinp.split('\n')
+                        
                         if len(lcheck) >= 2: multiline = True
+
                     else:
                         tsinp = getfile(None)
                         lcheck = tsinp.split('\n')
+
                         if len(lcheck) >= 2: multiline = True
                 rlist = tsinp.split('/')
+
                 #print(rlist)
                 if multiline:
                     for line in lcheck:
                         if not '--' in line and line != '':
                             ln = line.split('/')
                             sequence(totlist(ln), hardcode, hide)
+
                 else: sequence(totlist(rlist), hardcode, hide)
         log(tsinp)
 

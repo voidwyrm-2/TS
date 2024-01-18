@@ -126,7 +126,7 @@ def instructs(wayp: list):
         ins = f'{convertx(co[0], windratio[0])},{fixY(converty(co[1], windratio[1]))}'
         out = out + f'{ins}/'
     #if out[-1] == '/': del out[-1]
-    return out
+    return out.removesuffix('/')
 
 
 def save(turstructs: str):
