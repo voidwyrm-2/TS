@@ -36,9 +36,9 @@ pygame.font.init()
 mainfont = pygame.font.Font('freesansbold.ttf', 32)
 
 savetofile = True
-pixelmode = True
+pixelmode = False
 
-SHOWACTUALCOORDS = True
+SHOWACTUALCOORDS = False
 
 plinitxy = windratio[0] // 2, windratio[1] // 2
 
