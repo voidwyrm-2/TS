@@ -77,6 +77,49 @@ def box3d():
     Turt.goto(64, -94)
     Turt.hideturtle()
 
+def mouseface():
+    Turt.goto(31, -210)
+    Turt.goto(141, -59)
+    Turt.goto(137, 138)
+    Turt.goto(0, 217)
+    Turt.goto(-117, 144)
+    Turt.goto(-120, -60)
+    Turt.goto(31, -212)
+    Turt.color('white')
+    Turt.goto(-30, -94)
+    Turt.color('black')
+    Turt.goto(72, -95)
+    Turt.goto(70, -27)
+    Turt.goto(-34, -30)
+    Turt.goto(-30, -94)
+    Turt.color('white')
+    Turt.goto(-64, -92)
+    Turt.color('black')
+    Turt.color('white')
+    Turt.goto(-68, 12)
+    Turt.color('black')
+    Turt.color('white')
+    Turt.goto(-43, 57)
+    Turt.color('black')
+    Turt.goto(-2, 60)
+    Turt.goto(-2, 114)
+    Turt.goto(-52, 114)
+    Turt.goto(-44, 58)
+    Turt.color('white')
+    Turt.goto(4, 34)
+    Turt.color('black')
+    Turt.goto(-15, -2)
+    Turt.goto(28, -3)
+    Turt.goto(5, 35)
+    Turt.color('white')
+    Turt.goto(38, 56)
+    Turt.color('black')
+    Turt.goto(39, 115)
+    Turt.goto(87, 116)
+    Turt.goto(87, 54)
+    Turt.goto(38, 56)
+    Turt.hideturtle()
+
 
 
 '''hardcodes = {
@@ -111,7 +154,8 @@ def totlist(rawlist: list):
     final = []
     for r in rawlist:
         sr = r.split(',')
-        tr = int(sr[0]), int(sr[1])
+        if len(sr) >= 3: tr = int(sr[0]), int(sr[1]), sr[2]
+        else: tr = int(sr[0]), int(sr[1])
         final.append(tr)
         #print('totlist:', r)
     #print(final)
@@ -131,11 +175,20 @@ def sequence(tlist: list | tuple, shouldhardcode: bool, shouldhide: bool):
     out = ''
     if shouldhardcode:
         for t in tlist:
-            out = f'{out}Turt.goto{t}\n'
+            if len(t) >= 3: out = f'{out}Turt.color(\'{t[2]}\')\nTurt.goto({t[0]}, {t[1]})\nTurt.color(\'black\')\n'
+            else: out = f'{out}Turt.goto{t}\n'
         out = f'{out}Turt.hideturtle()'
         print(out)
     else:
-        for t in tlist: Turt.goto(t[0], t[1]); print(f'moved Turt to {t}')
+        for t in tlist:
+            if len(t) >= 3:
+                Turt.color(str(t[2]))
+                Turt.goto(t[0], t[1])
+                print(f'moved Turt to ({t[0]}, {t[1]}) as "{t[2]}"')
+                Turt.color('black')
+            else:
+                Turt.goto(t[0], t[1])
+                print(f'moved Turt to {t}')
 
 
 def getfile(file: str | None):
@@ -163,6 +216,7 @@ def randtur():
             if rol == 0: Turt.right(randint(0, 360))
             else: Turt.left(randint(0, 360))
         Turt.goto(xy[0], xy[1])
+    Turt.setheading(180)
     Turt.speed(6)
 
 
@@ -218,7 +272,7 @@ def TS():
 
         elif tsinp.split(' ')[0] == 'angle':  print(f'Turt({Turt.heading()})')
 
-        elif tsinp.split(' ')[0] == 'boxes': boxes()
+        elif tsinp.split(' ')[0] == 'mouseface': mouseface()
 
         elif tsinp.split(' ')[0] == 'speed':
             #print(len(tsinp.split(' ')))
