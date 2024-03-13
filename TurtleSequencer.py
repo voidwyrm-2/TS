@@ -3,22 +3,46 @@ from turtle import Turtle
 #from turtle import goto
 from pathlib import Path
 from random import randint
-import struct
+from PIL import Image, UnidentifiedImageError
+
+
+
+iscomputer = False
+try:
+    #DO NOT REMOVE THIS TRY-CATCH, IT IS USED TO CHECK IF YOU ARE USING THE PYTHONISTA APP OR NOT
+    import scene
+except ModuleNotFoundError: iscomputer = True
+
+if iscomputer: dimensions = 355, 357; print('current device is a computer, loading computer dimensions')
+else: dimensions = 147, 147; print('current device isn\'t a computer, loading pocket device dimensions')
+
+imgscalefactor = 5
+
+
+
+def removeitems(list: list, items: list | tuple):
+    out = []
+    for i in list:
+        if i not in items: out.append(i)
+    return out
+
+
+
+
+
 turtle.hideturtle()
-
-
 Turt = Turtle('classic', 1000, True)
-#Turt.speed(1)
-#turtle.register_shape('Greeben-flat.gif')
-
+screen = Turt.getscreen()
+screen.colormode(255)
+#screen.screensize()
+#print(screen.window_width() / 2, screen.window_height() / 2)
+#print(screen.canvwidth, screen.canvheight)
 
 
 
 if not Path('TSin.txt').exists():
     with open('TSin.txt', 'xt') as fir: fir.write('')
 Turt.goto(0,0)
-#screen = Screen()
-#screen.screensize(800, 800)
 
 
 
@@ -31,119 +55,120 @@ test3 = [(225, 500), (65, 185), (390, 65), (-10, 550), (-10, -10), (290, 255), (
 test4 = [(225, 265), (335, 145), (460, 345), (150, 475), (35, 190)]
 
 
-def boxes():
-    Turt.color('white')
-    Turt.goto(4, -4)
-    Turt.color('black')
-    Turt.goto(-24, -4)
-    Turt.goto(-24, 24)
-    Turt.goto(4, 24)
-    Turt.goto(4, -4)
-    Turt.color('white')
-    Turt.goto(64, 54)
-    Turt.color('black')
-    Turt.goto(64, 94)
-    Turt.goto(104, 94)
-    Turt.goto(104, 54)
-    Turt.goto(64, 54)
-    Turt.color('white')
-    Turt.goto(34, -54)
-    Turt.color('black')
-    Turt.goto(14, -54)
-    Turt.goto(-4, -74)
-    Turt.goto(-4, -94)
-    Turt.goto(14, -114)
-    Turt.goto(34, -114)
-    Turt.goto(54, -94)
-    Turt.goto(54, -74)
-    Turt.goto(34, -54)
-    Turt.color('white')
-    Turt.goto(-114, -34)
-    Turt.color('black')
-    Turt.goto(-184, -34)
-    Turt.goto(-184, -104)
-    Turt.goto(-114, -104)
-    Turt.goto(-114, -34)
-    Turt.hideturtle()
+def no_hardcode_found(command_name: str, *empty): print(f'no command "{command_name}" found')
+
+class hardcoded:
+    def gethardcode(hardcodename):
+        gottencommand = getattr(hardcoded, hardcodename, no_hardcode_found)
+        gottencommand()
+
+    def boxes():
+        Turt.color('white')
+        Turt.goto(4, -4)
+        Turt.color('black')
+        Turt.goto(-24, -4)
+        Turt.goto(-24, 24)
+        Turt.goto(4, 24)
+        Turt.goto(4, -4)
+        Turt.color('white')
+        Turt.goto(64, 54)
+        Turt.color('black')
+        Turt.goto(64, 94)
+        Turt.goto(104, 94)
+        Turt.goto(104, 54)
+        Turt.goto(64, 54)
+        Turt.color('white')
+        Turt.goto(34, -54)
+        Turt.color('black')
+        Turt.goto(14, -54)
+        Turt.goto(-4, -74)
+        Turt.goto(-4, -94)
+        Turt.goto(14, -114)
+        Turt.goto(34, -114)
+        Turt.goto(54, -94)
+        Turt.goto(54, -74)
+        Turt.goto(34, -54)
+        Turt.color('white')
+        Turt.goto(-114, -34)
+        Turt.color('black')
+        Turt.goto(-184, -34)
+        Turt.goto(-184, -104)
+        Turt.goto(-114, -104)
+        Turt.goto(-114, -34)
+        Turt.hideturtle()
 
 
-def box3d():
-    Turt.goto(4, -4)
-    Turt.goto(134, -4)
-    Turt.goto(134, -94)
-    Turt.goto(4, -94)
-    Turt.goto(4, -4)
-    Turt.goto(64, -4)
-    Turt.goto(64, -94)
-    Turt.hideturtle()
+    def box3d():
+        Turt.goto(4, -4)
+        Turt.goto(134, -4)
+        Turt.goto(134, -94)
+        Turt.goto(4, -94)
+        Turt.goto(4, -4)
+        Turt.goto(64, -4)
+        Turt.goto(64, -94)
+        Turt.hideturtle()
 
-def mouseface():
-    Turt.goto(31, -210)
-    Turt.goto(141, -59)
-    Turt.goto(137, 138)
-    Turt.goto(0, 217)
-    Turt.goto(-117, 144)
-    Turt.goto(-120, -60)
-    Turt.goto(31, -212)
-    Turt.color('white')
-    Turt.goto(-30, -94)
-    Turt.color('black')
-    Turt.goto(72, -95)
-    Turt.goto(70, -27)
-    Turt.goto(-34, -30)
-    Turt.goto(-30, -94)
-    Turt.color('white')
-    Turt.goto(-64, -92)
-    Turt.color('black')
-    Turt.color('white')
-    Turt.goto(-68, 12)
-    Turt.color('black')
-    Turt.color('white')
-    Turt.goto(-43, 57)
-    Turt.color('black')
-    Turt.goto(-2, 60)
-    Turt.goto(-2, 114)
-    Turt.goto(-52, 114)
-    Turt.goto(-44, 58)
-    Turt.color('white')
-    Turt.goto(4, 34)
-    Turt.color('black')
-    Turt.goto(-15, -2)
-    Turt.goto(28, -3)
-    Turt.goto(5, 35)
-    Turt.color('white')
-    Turt.goto(38, 56)
-    Turt.color('black')
-    Turt.goto(39, 115)
-    Turt.goto(87, 116)
-    Turt.goto(87, 54)
-    Turt.goto(38, 56)
-    Turt.hideturtle()
-
-
-
-'''hardcodes = {
-    'boxes': boxes(),
-    '3dbox': box3d()
-}'''
+    def mouseface():
+        Turt.goto(31, -210)
+        Turt.goto(141, -59)
+        Turt.goto(137, 138)
+        Turt.goto(0, 217)
+        Turt.goto(-117, 144)
+        Turt.goto(-120, -60)
+        Turt.goto(31, -212)
+        Turt.color('white')
+        Turt.goto(-30, -94)
+        Turt.color('black')
+        Turt.goto(72, -95)
+        Turt.goto(70, -27)
+        Turt.goto(-34, -30)
+        Turt.goto(-30, -94)
+        Turt.color('white')
+        Turt.goto(-64, -92)
+        Turt.color('black')
+        Turt.color('white')
+        Turt.goto(-68, 12)
+        Turt.color('black')
+        Turt.color('white')
+        Turt.goto(-43, 57)
+        Turt.color('black')
+        Turt.goto(-2, 60)
+        Turt.goto(-2, 114)
+        Turt.goto(-52, 114)
+        Turt.goto(-44, 58)
+        Turt.color('white')
+        Turt.goto(4, 34)
+        Turt.color('black')
+        Turt.goto(-15, -2)
+        Turt.goto(28, -3)
+        Turt.goto(5, 35)
+        Turt.color('white')
+        Turt.goto(38, 56)
+        Turt.color('black')
+        Turt.goto(39, 115)
+        Turt.goto(87, 116)
+        Turt.goto(87, 54)
+        Turt.goto(38, 56)
+        Turt.hideturtle()
 
 
-#def Turty():
+    def rect3d():
+        Turt.color('white')
+        Turt.goto(100, 100)
+        Turt.color('black')
+        Turt.goto(100, 100)
+        Turt.goto(70, 100)
+        Turt.goto(70, 0)
+        Turt.goto(70, 0)
+        Turt.goto(100, 0)
+        Turt.goto(100, 100)
+        Turt.goto(30, 100)
+        Turt.goto(30, 0)
+        Turt.goto(70, 0)
+        Turt.hideturtle()
 
-def get_image_info(data):
-    if is_png(data):
-        w, h = struct.unpack('>LL', data[16:24])
-        width = int(w)
-        height = int(h)
-    else: print('error: not a png image')#raise Exception('not a png image')
-    return width, height
+hardcodes = removeitems(list(vars(hardcoded).keys()), ('__module__', 'gethardcode', '__dict__', '__weakref__', '__doc__'))
 
-def is_png(data):
-    return (data[:8] == '\211PNG\r\n\032\n'and (data[12:16] == 'IHDR'))
-
-
-
-REPEAT = False
 
 
 clog = []
@@ -151,6 +176,7 @@ def log(data): clog.append(data)
 
 
 def totlist(rawlist: list):
+    #print('rawlist:' + str(rawlist))
     final = []
     for r in rawlist:
         sr = r.split(',')
@@ -197,6 +223,10 @@ def getfile(file: str | None):
     else:
         with open(f'drawings/{file}.txt', 'rt') as fin: return fin.read()
 
+def getfileall(file: str | None):
+    with open(f'{file}', 'rt') as fin: return fin.read()
+
+
 def getlogs():
     global clog
     fout = ''
@@ -209,23 +239,62 @@ shouldturn = True
 def randtur():
     Turt.speed(0)
     rinp = input('how many times?> ')
-    for q in range(int(rinp)):
-        xy = randint(-147, 147), randint(-147, 147)
+    for _ in range(int(rinp)):
+        xy = randint(dimensions[0], dimensions[1]), randint(dimensions[0], dimensions[1])
         if shouldturn:
             rol = randint(0, 1)
             if rol == 0: Turt.right(randint(0, 360))
             else: Turt.left(randint(0, 360))
         Turt.goto(xy[0], xy[1])
+        print(f'moved Turt to {xy}')
     Turt.setheading(180)
     Turt.speed(6)
 
 
-def turny():
-    Turt.left(75)
+def moveto(x: int | tuple[int, int], y: int | None = None):
+    Turt.pencolor(255, 255, 255)
+    if type(x) == tuple and type(y) == None: Turt.goto(x)
+    else: Turt.goto(x, y)
+    Turt.pencolor(0, 0, 0)
+
+
+def drawpixel(color: tuple[int, int, int] | tuple[int, int, int, int]):
+    if len(color) < 3: print(f'unable to read color "{color}", too small'); return
+    try: trans = color[3]
+    except: trans = 255
+    clear = False
+    if trans <= 0: clear = True; Turt.pencolor(255, 255, 255)
+    else: Turt.color(color[0], color[1], color[2])
+    if clear:
+        Turt.setheading(0)
+        Turt.forward(imgscalefactor)
+        return
+    Turt.begin_fill()
+    Turt.setheading(0)
+    Turt.forward(imgscalefactor)
+    Turt.setheading(90)
+    Turt.forward(imgscalefactor)
+    Turt.setheading(180)
+    Turt.forward(imgscalefactor)
+    Turt.setheading(270)
+    Turt.forward(imgscalefactor)
+    Turt.setheading(0)
+    Turt.forward(imgscalefactor)
+    Turt.end_fill()
+
+
+
+def multisquen(list: list | tuple, shouldhardcode: bool, shouldhide: bool):
+    for line in list:
+        if not line.startswith('--') and line != '':
+            ln = line.split('--')[0].split('/')
+            sequence(totlist(ln), shouldhardcode, shouldhide)
+
+
 
 def TS():
     print('the cursor\'s name is Turt')
-    print('instructions should be in the format of "x,y/x,-y/-x,y"')
+    print('instructions should be in the format of "x,y/x,-y,[color]/-x,y,[color]"')
     print('to get instructions from a file, type "file [filename, not including extension]"')
     print('to see Turt\'s position, type "pos"')
     print('to see Turt\'s angle, type "angle"')
@@ -238,90 +307,116 @@ def TS():
     #print('to draw a preset, type "draw [preset number]", currently availible presets: 1, ')
 
     pointer = '> '
-    lcheck = []
-    multiline = False
     hardcode = False
     hide = False
+    prev = '' #image Turt(16).png
 
-    while True:
-        tsinp = input(pointer)
-        #print(tsinp)
-        if len(tsinp.split(' ')) >= 2:
-            if tsinp.split(' ')[1] == 'hide': hide = True; pass
-        else: pass
+    running = True
+    while running:
+        tsinp = input(pointer).strip()
+        if tsinp != 'prev': prev = tsinp
 
-        if tsinp == 'exit' or tsinp == 'quit': break
+        if tsinp == 'prev' and prev.strip() != '': tsinp = prev
 
-        elif tsinp.split(' ')[0] == 'clear': Turt.clear(); print('cleared all drawings')
+        if tsinp == 'exit' or tsinp == 'quit': running = False; break
 
-        elif tsinp.split(' ')[0] == 'reset': Turt.goto(0,0); Turt.clear(); print('reset everything')
+        elif tsinp == 'clear': Turt.clear(); print('cleared all drawings')
+
+        elif tsinp == 'reset': Turt.goto(0,0); Turt.clear(); print('reset everything')
 
         #elif 'image' in tsinp: #Turt.register_shape(tsinp.split(' ')[1])
 
-        #elif tsinp.split(' ')[0] == 'draw 1': Turt.shape('Greeben-flat.gif')#Turt.shape(tsinp.split(' ')[1])
+        #elif tsinp == 'draw 1': Turt.shape('Greeben-flat.gif')#Turt.shape(tsinp.split(' ')[1])
 
-        elif tsinp.split(' ')[0] == 'log' or tsinp == 'logs': getlogs()
+        elif tsinp == 'log' or tsinp == 'logs': getlogs()
 
-        elif tsinp.split(' ')[0] == 'show': Turt.showturtle(); print('Turt shown')
+        elif tsinp == 'show': Turt.showturtle(); print('Turt shown')
 
-        elif tsinp.split(' ')[0] == 'hide': Turt.hideturtle(); print('Turt hidden')
+        elif tsinp == 'hide': Turt.hideturtle(); print('Turt hidden')
 
-        elif tsinp.split(' ')[0] == 'undo': Turt.undo(); print('undid draw')
+        elif tsinp == 'undo': Turt.undo(); print('undid draw')
 
-        elif tsinp.split(' ')[0] == 'pos':  print(f'Turt{Turt.pos()}')
+        elif tsinp == 'pos': print(f'Turt{Turt.pos()}')
 
-        elif tsinp.split(' ')[0] == 'angle':  print(f'Turt({Turt.heading()})')
-
-        elif tsinp.split(' ')[0] == 'mouseface': mouseface()
-
-        elif tsinp.split(' ')[0] == 'speed':
-            #print(len(tsinp.split(' ')))
-            if len(tsinp.split(' ')) < 2: print(f'Turt({Turt.speed()})')
-            elif tsinp.split(' ')[1] == 'reset' or tsinp.split(' ')[1] == 'reset': Turt.speed(3); print('reset Turt\'s speed to normal')
-            else: Turt.speed(int(tsinp.split(' ')[1])); print(f'set Turt\'s speed to {tsinp.split(" ")[1]}')
+        elif tsinp == 'angle': print(f'Turt({Turt.heading()})')
 
         elif tsinp == 'random': randtur()
 
-        else:
-            #print('got to the first else!')
+        elif tsinp == 'test1': sequence(test1)
 
-            if tsinp == 'test1': sequence(test1)
+        elif tsinp == 'test2': sequence(test2)
 
-            elif tsinp == 'test2': sequence(test2)
+        elif tsinp == 'test3': sequence(test3)
 
-            elif tsinp == 'test3': sequence(test3)
+        elif tsinp == 'test4': sequence(test4)
 
-            elif tsinp == 'test4': sequence(test4)
+        elif tsinp.startswith('image '):
+            tsinp = tsinp.removeprefix('image ')
+            if not Path(tsinp).exists(): print(f'file "{tsinp}" does not exist'); continue
+            try:
+                img = Image.open(tsinp)
+            except UnidentifiedImageError: print(f'file "{tsinp}" is not a valid image file'); continue
+            imgsize = img.size
+            #imgsizescaled = imgsize[0] * imgscalefactor, imgsize[1] * imgscalefactor
+            #if imgsizescaled[0] > dimensions[0] * 2 or imgsizescaled[1] > dimensions[1] * 2: print(f'file "{tsinp}" is too large'); continue
+            startpos = -200, 200
+            moveto(startpos)
+            prevspeed = Turt.speed()
+            Turt.speed(0)
+            for col in range(imgsize[0]):
+                for row in range(imgsize[0]):
+                    pixel = img.getpixel((row, col))
+                    #print(f'drawing pixel (col:{col},row:{row}) with color {pixel}')
+                    drawpixel(pixel)
+                Turt.setheading(270)
+                Turt.forward(1)
+                moveto(startpos[0], startpos[1] - imgscalefactor * (col + 1))
+            Turt.speed(prevspeed)
 
+        elif tsinp.startswith('dimensions'):
+            if tsinp == 'dimensions': print(dimensions)
+            #elif tsinp.startswith('dimensions '):
+            #    try:
+            #        di = tsinp.removeprefix('dimensions ').strip().split(', ')
+            #        dimensions = int(di[0]), int(di[1])
+            #    except ValueError: print(print(f'"{tsinp.removeprefix("dimensions ").strip()}" is not valid'))
+
+        elif tsinp.startswith('hardcoded '): hardcoded.gethardcode(tsinp.removeprefix('hardcoded '))
+
+        elif tsinp.startswith('speed'):
+            #print(len(tsinp.split(' ')))
+            if tsinp == 'speed': print(f'Turt({Turt.speed()})')
+            elif tsinp.removeprefix('speed ').strip() == 'reset': Turt.speed(3); print('reset Turt\'s speed to normal')
             else:
-                #print('got to the second else!')
+                try:
+                    Turt.speed(int(tsinp.strip().removeprefix('speed ').strip()))
+                    print(f'set Turt\'s speed to {tsinp.removeprefix("speed ").strip()}')
+                except ValueError: print(print(f'"{tsinp.removeprefix("speed ").strip()}" is not valid'))
 
-                if tsinp.split(' ')[0] == 'file' or tsinp.split(' ')[0] == 'run' or tsinp.split(' ')[0] == 'draw':
-                    if len(tsinp.split(' ')) >= 2:
-                        if len(tsinp.split(' ')) >= 3:
-                            if tsinp.split(' ')[2] == 'hardcode': hardcode = True
-                            elif tsinp.split(' ')[2] == 'hide': hide = True
-
-                        tsinp = getfile(tsinp.split(' ')[1])
-                        lcheck = tsinp.split('\n')
-                        
-                        if len(lcheck) >= 2: multiline = True
-
+        else:
+            if tsinp.startswith(('file ', 'run ')):
+                tsinp = tsinp.removeprefix('file ').removeprefix('run ')
+                if tsinp.strip() == '':
+                    tsinp = getfile(None)
+                    tsfile = tsinp.split('\n')
+                    multisquen(tsfile, hardcode, hide)
+                else:
+                    tsinp = tsinp.split(' ')
+                    path = tsinp.pop(0)
+                    hardcode = 'hardcode' in tsinp
+                    hide = 'hide' in tsinp
+                    if path == 'all':
+                        for file in Path('./drawings/').iterdir():
+                            print(f'====CURRENTFILE: {str(file)}====')
+                            multisquen(getfileall(file).split('\n'), hardcode, hide)
                     else:
-                        tsinp = getfile(None)
-                        lcheck = tsinp.split('\n')
-
-                        if len(lcheck) >= 2: multiline = True
+                        tsinp = getfile(path)
+                        tsfile = tsinp.split('\n')
+                        multisquen(tsfile, hardcode, hide)
+                
+            else:
                 rlist = tsinp.split('/')
-
-                #print(rlist)
-                if multiline:
-                    for line in lcheck:
-                        if not '--' in line and line != '':
-                            ln = line.split('/')
-                            sequence(totlist(ln), hardcode, hide)
-
-                else: sequence(totlist(rlist), hardcode, hide)
+                sequence(totlist(rlist), hardcode, hide)
         log(tsinp)
 
 
