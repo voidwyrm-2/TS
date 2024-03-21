@@ -153,3 +153,7 @@ cython_debug/
 
 .DS_Store
 drawings/.DS_Store
+
+Turtle3D.py
+obj/
+*.liz

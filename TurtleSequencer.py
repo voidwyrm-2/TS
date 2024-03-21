@@ -4,6 +4,9 @@ from turtle import Turtle
 from pathlib import Path
 from random import randint
 from PIL import Image, UnidentifiedImageError
+from rainworldrooms import partitionroom, roomtorgbl
+from lizreader import liztoimage
+from commonlib import *
 
 
 
@@ -18,22 +21,23 @@ else: dimensions = 147, 147; print('current device isn\'t a computer, loading po
 
 imgscalefactor = 5
 
+can3drender = True if iscomputer else False
+if iscomputer:
+    try:
+        import Turtle3D
+        print('Turtle3D loaded successfully')
+    except ModuleNotFoundError:
+        can3drender = False
+        print('Turtle3D not installed, skipping')
 
-
-def removeitems(list: list, items: list | tuple):
-    out = []
-    for i in list:
-        if i not in items: out.append(i)
-    return out
-
-
+    if can3drender: from turtle3drendering import main
 
 
 
 turtle.hideturtle()
 Turt = Turtle('classic', 1000, True)
 screen = Turt.getscreen()
-screen.colormode(255)
+if iscomputer: screen.colormode(255)
 #screen.screensize()
 #print(screen.window_width() / 2, screen.window_height() / 2)
 #print(screen.canvwidth, screen.canvheight)
@@ -258,29 +262,54 @@ def moveto(x: int | tuple[int, int], y: int | None = None):
     Turt.pencolor(0, 0, 0)
 
 
-def drawpixel(color: tuple[int, int, int] | tuple[int, int, int, int]):
+def drawpixel(color: tuple[int, int, int] | tuple[int, int, int, int], xy = (imgscalefactor, imgscalefactor)):
     if len(color) < 3: print(f'unable to read color "{color}", too small'); return
     try: trans = color[3]
     except: trans = 255
     clear = False
-    if trans <= 0: clear = True; Turt.pencolor(255, 255, 255)
-    else: Turt.color(color[0], color[1], color[2])
+    if trans <= 0: clear = True; Turt.color(255, 255, 255)#; Turt.fillcolor(255, 255, 255)
+    else: Turt.color(color[0], color[1], color[2])#; Turt.fillcolor(color[0], color[1], color[2])
     if clear:
         Turt.setheading(0)
-        Turt.forward(imgscalefactor)
+        Turt.forward(xy[0])
         return
     Turt.begin_fill()
     Turt.setheading(0)
-    Turt.forward(imgscalefactor)
+    Turt.forward(xy[0])
     Turt.setheading(90)
-    Turt.forward(imgscalefactor)
+    Turt.forward(xy[1])
     Turt.setheading(180)
-    Turt.forward(imgscalefactor)
+    Turt.forward(xy[0])
     Turt.setheading(270)
-    Turt.forward(imgscalefactor)
-    Turt.setheading(0)
-    Turt.forward(imgscalefactor)
+    Turt.forward(xy[1])
     Turt.end_fill()
+    Turt.setheading(0)
+    Turt.forward(xy[0])
+    
+
+
+def simplfyimage(img: Image, imgxy: tuple[int, int]):
+    out = []
+    for col in range(imgxy[0]):
+        o = []
+        for row in range(imgxy[0]):
+            pixel = img.getpixel((row, col))
+            o.append(pixel)
+        out.append(o)
+    return out
+
+
+def partitionimage(simg: list):
+    out = []
+    for col in range(len(simg)):
+        o = []
+        prev = ()
+        for row in range(len(simg[col])):
+            if prev != () and simg[col][row] != prev: out.append(o); o = []
+            prev = simg[col][row]
+            o.append(simg[col][row])
+        #out.append(o)
+    return out
 
 
 
@@ -350,6 +379,48 @@ def TS():
 
         elif tsinp == 'test4': sequence(test4)
 
+        elif tsinp.startswith('lizard '):
+            tsinp = tsinp.removeprefix('lizard ')
+            if not Path(tsinp).exists(): print(f'file "{tsinp}" does not exist'); continue
+            lizimage = liztoimage(tsinp)
+            startpos = -300, 10
+            if not iscomputer: startpos = 0, 0
+            moveto(startpos)
+            prevspeed = Turt.speed()
+            Turt.speed(0)
+            for line in range(len(lizimage)):
+                for col in range(len(lizimage[line])):
+                    pixel = lizimage[line][col]
+                    print(f'drawing pixel (col:{col},row:{line}) with color {pixel}')
+                    drawpixel(pixel)
+                Turt.setheading(270)
+                Turt.forward(1)
+                moveto(startpos[0], startpos[1] - imgscalefactor * (line + 1))
+            Turt.speed(prevspeed)
+
+        elif tsinp.startswith('render ') and can3drender:
+            tsinp = tsinp.removeprefix('render ')
+            if not Path('obj/' + tsinp).exists(): print(f'file "{tsinp}" does not exist'); continue
+            main('obj/' + tsinp)
+
+        elif tsinp.startswith('room '):
+            tsinp = tsinp.removeprefix('room ')
+            if not Path(tsinp).exists(): print(f'file "{tsinp}" does not exist'); continue
+            with open(tsinp, 'rt') as rf: roomfile = rf.read()
+            room = roomtorgbl(partitionroom(roomfile))
+            startpos = -dimensions[0] + 5, dimensions[1] - 5
+            if not iscomputer: startpos = 0, 0
+            moveto(startpos)
+            prevspeed = Turt.speed()
+            Turt.speed(0)
+            for line in range(len(room)):
+                for tile in room[line]:
+                    drawpixel(tile)
+                Turt.setheading(270)
+                Turt.forward(1)
+                moveto(startpos[0], startpos[1] - imgscalefactor * (line + 1))
+            Turt.speed(prevspeed)
+
         elif tsinp.startswith('image '):
             tsinp = tsinp.removeprefix('image ')
             if not Path(tsinp).exists(): print(f'file "{tsinp}" does not exist'); continue
@@ -359,15 +430,29 @@ def TS():
             imgsize = img.size
             #imgsizescaled = imgsize[0] * imgscalefactor, imgsize[1] * imgscalefactor
             #if imgsizescaled[0] > dimensions[0] * 2 or imgsizescaled[1] > dimensions[1] * 2: print(f'file "{tsinp}" is too large'); continue
-            startpos = -200, 200
+            startpos = -300, 250
+            if not iscomputer: startpos = 0, 0
             moveto(startpos)
             prevspeed = Turt.speed()
             Turt.speed(0)
-            for col in range(imgsize[0]):
-                for row in range(imgsize[0]):
-                    pixel = img.getpixel((row, col))
-                    #print(f'drawing pixel (col:{col},row:{row}) with color {pixel}')
-                    drawpixel(pixel)
+            imgs = simplfyimage(img, imgsize)
+            print(partitionimage(imgs))
+            for col in range(len(imgs)):
+                ec = 0
+                for c in imgs[col]:
+                    if (c[0] >= 255 and c[1] >= 255 and c[2] >= 255) or c[3] <= 0: ec += 1
+                if ec == len(imgs[col]):
+                    #print('is empty, drawing large empty pixel with xy of ' + str((len(imgs[col]) * imgscalefactor, imgscalefactor)))
+                    #drawpixel((255, 255, 255), (len(imgs[col]) * imgscalefactor, imgscalefactor))
+                    Turt.pencolor(255, 255, 255)
+                    Turt.setheading(0)
+                    Turt.forward(len(imgs[col]) * imgscalefactor)
+                    Turt.pencolor(0, 0, 0)
+                else:
+                    for row in range(len(imgs[col])):
+                        pixel = imgs[col][row]
+                        print(f'drawing pixel (col:{col},row:{row}) with color {pixel}')
+                        drawpixel(pixel)
                 Turt.setheading(270)
                 Turt.forward(1)
                 moveto(startpos[0], startpos[1] - imgscalefactor * (col + 1))
@@ -381,7 +466,7 @@ def TS():
             #        dimensions = int(di[0]), int(di[1])
             #    except ValueError: print(print(f'"{tsinp.removeprefix("dimensions ").strip()}" is not valid'))
 
-        elif tsinp.startswith('hardcoded '): hardcoded.gethardcode(tsinp.removeprefix('hardcoded '))
+        elif tsinp.startswith(('hardcoded ', 'hardcode ')): hardcoded.gethardcode(tsinp.removeprefix('hardcoded ').removeprefix('hardcode '))
 
         elif tsinp.startswith('speed'):
             #print(len(tsinp.split(' ')))

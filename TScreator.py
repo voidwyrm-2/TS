@@ -296,7 +296,7 @@ while running:
             if event.key == pygame.K_ESCAPE or event.key == pygame.K_q: running = False; break
 
             if event.key == pygame.K_RETURN:
-                if colorindex != 0: wps.append((plX, plY, colors[colorindex]))
+                if colorindex != 0: wps.append((plX, plY, list(colorvals.keys())[colorindex]))
                 else: wps.append((plX, plY))
 
             if event.key == pygame.K_LEFT or event.key == pygame.K_a:
@@ -348,7 +348,7 @@ while running:
                 else: wps.append((windratio[0] // 2,windratio[1] // 2))
             
             if event.key == pygame.K_LEFTBRACKET and colorindex > 0: colorindex -= 1
-            if event.key == pygame.K_RIGHTBRACKET and colorindex < len(colors) - 1: colorindex += 1
+            if event.key == pygame.K_RIGHTBRACKET and colorindex < len(list(colorvals.keys())) - 1: colorindex += 1
             
             if event.key == pygame.K_COMMA and not pixelmode: conformplayer(); pixelmode = True#; print(f'pixelmode is now on({pixelmode})')
             if event.key == pygame.K_PERIOD and pixelmode: pixelmode = False#; print(f'pixelmode is now off({pixelmode})')
@@ -360,10 +360,10 @@ while running:
             if not mouseDrawMode:
                 if pixelmode:
                     conformed = conformwaypoint(mouseX, mouseY)
-                    if colorindex != 0: wps.append((conformed[0], conformed[1], colors[colorindex]))
+                    if colorindex != 0: wps.append((conformed[0], conformed[1], list(colorvals.keys())[colorindex]))
                     else: wps.append((conformed[0], conformed[1]))
                 else:
-                    if colorindex != 0: wps.append((mouseX, mouseY, colors[colorindex]))
+                    if colorindex != 0: wps.append((mouseX, mouseY, list(colorvals.keys())[colorindex]))
                     else: wps.append((mouseX, mouseY))
             else:
                 mouseIsPressed = True
@@ -380,10 +380,10 @@ while running:
     if mouseIsPressed and mouseDrawMode:
         if pixelmode:
             conformed = conformwaypoint(mouseX, mouseY)
-            if colorindex != 0: wps.append((conformed[0], conformed[1], colors[colorindex]))
+            if colorindex != 0: wps.append((conformed[0], conformed[1], list(colorvals.keys())[colorindex]))
             else: wps.append((conformed[0], conformed[1]))
         else:
-            if colorindex != 0: wps.append((mouseX, mouseY, colors[colorindex]))
+            if colorindex != 0: wps.append((mouseX, mouseY, list(colorvals.keys())[colorindex]))
             else: wps.append((mouseX, mouseY))
         
         #print('mouse was clicked!'); mouseIsPressed = False
